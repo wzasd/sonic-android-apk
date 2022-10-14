@@ -16,13 +16,21 @@
  */
 package org.cloud.sonic.android
 
+import android.net.LocalServerSocket
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.blankj.utilcode.util.AppUtils
+import com.blankj.utilcode.util.LogUtils
 import com.gyf.immersionbar.ktx.immersionBar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.cloud.sonic.android.databinding.ActivityMainBinding
+import org.cloud.sonic.android.service.SonicManagerService
+import org.cloud.sonic.android.utils.SocketManager
+import org.cloud.sonic.android.utils.SocketServerManager
+import org.cloud.sonic.android.utils.appGlobalScope
 
 class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,11 +45,23 @@ class MainActivity : AppCompatActivity() {
       autoDarkModeEnable(true)
     }
 
+//    Handler(Looper.getMainLooper()) {
+//      finish()
+//      false
+//    }.sendEmptyMessageDelayed(0, 1500)
+    binding.version.text = AppUtils.getAppVersionName()
+
+    appGlobalScope.launch(Dispatchers.IO) {
+      SocketServerManager.createServer()
+
+    }
+
     Handler(Looper.getMainLooper()) {
-      finish()
+      appGlobalScope.launch(Dispatchers.IO) {
+        SocketManager.connectServer()
+      }
       false
     }.sendEmptyMessageDelayed(0, 1500)
-    binding.version.text = AppUtils.getAppVersionName()
   }
 
   override fun finish() {

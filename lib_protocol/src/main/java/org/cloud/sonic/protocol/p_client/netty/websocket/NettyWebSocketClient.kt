@@ -22,7 +22,6 @@ import io.netty.channel.Channel
 import io.netty.channel.ChannelOption
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioSocketChannel
-import io.netty.util.internal.StringUtil
 import org.cloud.sonic.protocol.bean.MessageProtobuf
 import org.cloud.sonic.protocol.p_client.base.IClientInterface
 import org.cloud.sonic.protocol.p_client.config.ClientOption
@@ -103,11 +102,13 @@ object NettyWebSocketClient: IClientInterface {
     override fun reconnect(isFirstConnect: Boolean) {
         if (!isFirstConnect) {
             // 非首次连接，代表之前已经进行过重连，延时一段时间再去重连
-            try {
-                SonicPLog.e(TAG, String.format("非首次连接，延时%1\$dms再次尝试重连", options.reconnectInterval))
-                Thread.sleep(options.reconnectInterval)
-            } catch (e: InterruptedException) {
-                e.printStackTrace()
+            options?.let {
+                try {
+                    SonicPLog.e(TAG, String.format("非首次连接，延时%1\$dms再次尝试重连", it.reconnectInterval))
+                    Thread.sleep(it.reconnectInterval)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
             }
         }
 
@@ -188,7 +189,7 @@ object NettyWebSocketClient: IClientInterface {
         )?.option(ChannelOption.TCP_NODELAY, true)?.option(ChannelOption.SO_SNDBUF, 32 * 1024)
             ?.option(ChannelOption.SO_RCVBUF, 32 * 1024)?.option(
             ChannelOption.CONNECT_TIMEOUT_MILLIS,
-            options.connectTimeout
+            options?.connectTimeout
         )?.handler(NettyWebSocketClientChannelInitializerHandler(this))
 
     }

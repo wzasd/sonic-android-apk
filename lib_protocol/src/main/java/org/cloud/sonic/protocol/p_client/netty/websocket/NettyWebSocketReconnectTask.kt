@@ -56,9 +56,9 @@ class NettyWebSocketReconnectTask(private val client: NettyWebSocketClient ): Ru
                         return
                     }
                     // 一个服务器地址列表都连接失败后，说明网络情况可能很差，延时指定时间（重连间隔时间*2）再去进行下一个服务器地址的连接
-                    SonicPLog.d(TAG, String.format("一个周期连接失败，等待%1\$dms后再次尝试重连", mOption.reconnectInterval * 2))
+                    SonicPLog.d(TAG, String.format("一个周期连接失败，等待%1\$dms后再次尝试重连", mOption!!.reconnectInterval * 2))
                     try {
-                        Thread.sleep(mOption.reconnectInterval * 2)
+                        Thread.sleep(mOption!!.reconnectInterval * 2)
                     } catch (e: InterruptedException) {
                         e.printStackTrace()
                     }

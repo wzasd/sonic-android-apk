@@ -54,7 +54,8 @@ class ClientOption {
      var serverList // 服务器地址列表
             : List<String>? = null
     
-    inline fun build(func: ClientOption.() -> Unit) {
+    inline fun build(func: ClientOption.() -> Unit): ClientOption{
         this.func()
+        return this
     }
 }

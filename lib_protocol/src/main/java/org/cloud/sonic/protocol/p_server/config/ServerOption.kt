@@ -56,7 +56,8 @@ class ServerOption {
         return this
     }
 
-    inline fun build(func: ServerOption.() -> Unit) {
+    inline fun build(func: ServerOption.() -> Unit): ServerOption {
         this.func()
+        return this
     }
 }

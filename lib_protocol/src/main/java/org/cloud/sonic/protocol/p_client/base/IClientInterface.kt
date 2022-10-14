@@ -17,6 +17,7 @@
 
 package org.cloud.sonic.protocol.p_client.base
 
+import android.content.Context
 import org.cloud.sonic.protocol.bean.MessageProtobuf
 import org.cloud.sonic.protocol.p_client.config.ClientOption
 import org.cloud.sonic.protocol.p_client.listener.IConnectStatusListener
@@ -32,11 +33,12 @@ import org.cloud.sonic.protocol.p_server.listener.IMsgReceivedListener
  */
 interface IClientInterface {
     /**
-     * 初始化
+     * initialization
      *
-     * @param options               IMS初始化配置
-     * @param connectStatusListener IMS连接状态监听
-     * @param msgReceivedListener   IMS消息接收监听
+     * @param context
+     * @param options               Initial configuration
+     * @param connectStatusListener connection status monitor
+     * @param msgReceivedListener   message reception monitor
      */
     fun init(
         options: ClientOption,
@@ -45,54 +47,54 @@ interface IClientInterface {
     ): Boolean
 
     /**
-     * 连接
+     * connect
      */
     fun connect()
 
     /**
-     * 重连
+     * reconnect
      *
-     * @param isFirstConnect 是否首次连接
+     * @param isFirstConnect whether to connect for the first time
      */
     fun reconnect(isFirstConnect: Boolean)
 
     /**
-     * 发送消息
+     * Send a message
      *
      * @param msg
      */
     fun sendMsg(msg: MessageProtobuf.Msg)
 
     /**
-     * 发送消息
-     * 重载
+     * Send a message
+     * overload
      *
      * @param msg
-     * @param listener 消息发送状态监听器
+     * @param listener message sending status listener
      */
     fun sendMsg(msg: MessageProtobuf.Msg, listener: IMsgSentStatusListener?)
 
     /**
-     * 发送消息
-     * 重载
+     * Send a message
+     * overload
      *
      * @param msg
-     * @param isJoinResendManager 是否加入消息重发管理器
+     * @param isJoinResendManager Whether to join the message resend manager
      */
     fun sendMsg(msg: MessageProtobuf.Msg, isJoinResendManager: Boolean)
 
     /**
-     * 发送消息
-     * 重载
+     * Send a message
+     * overload
      *
      * @param msg
-     * @param listener            消息发送状态监听器
-     * @param isJoinResendManager 是否加入消息重发管理器
+     * @param listener            message sending status listener
+     * @param isJoinResendManager Whether to join the message resend manager
      */
     fun sendMsg(msg: MessageProtobuf.Msg, listener: IMsgSentStatusListener?, isJoinResendManager: Boolean)
 
     /**
-     * 释放资源
+     * release
      */
     fun release()
 }
